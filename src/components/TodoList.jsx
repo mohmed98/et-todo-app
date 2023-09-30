@@ -3,10 +3,10 @@ import map from "lodash/map";
 
 import TodoItem from "./TodoItem";
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, onComplete }) => {
   const _renderTodos = () => {
     return map(todos, (todo, index) => {
-      return <TodoItem key={index} id={index} {...todo} />;
+      return <TodoItem key={index} id={index} onComplete={onComplete} {...todo} />;
     });
   };
 
