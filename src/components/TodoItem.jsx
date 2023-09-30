@@ -1,20 +1,11 @@
 import React from "react";
 
-class TodoItem extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this._onCompleteCheck = this._onCompleteCheck.bind(this);
-  }
-
-  _onCompleteCheck(event) {
-    const { id, onComplete } = this.props;
-
+const TodoItem = ({ id, complete, title, onComplete }) => {
+  const _onCompleteCheck = (event) => {
     onComplete(id);
-  }
+  };
 
-  _renderCheckbox() {
-    const { complete } = this.props;
+  const _renderCheckbox = () => {
     const attrs = {};
 
     if (complete) {
@@ -26,33 +17,29 @@ class TodoItem extends React.Component {
         <input
           type="checkbox"
           className="form-control"
-          onChange={this._onCompleteCheck}
+          onChange={_onCompleteCheck}
           {...attrs}
         />
       </div>
     );
-  }
+  };
 
-  _renderTitle() {
-    const { title } = this.props;
-
+  const _renderTitle = () => {
     return (
       <div className="col-10 todo-item__title">
         <h3>{title}</h3>
       </div>
     );
-  }
+  };
 
-  render() {
-    return (
-      <li className="list-group-item todo-item">
-        <div className="row">
-          {this._renderCheckbox()}
-          {this._renderTitle()}
-        </div>
-      </li>
-    );
-  }
-}
+  return (
+    <li className="list-group-item todo-item">
+      <div className="row">
+        {_renderCheckbox()}
+        {_renderTitle()}
+      </div>
+    </li>
+  );
+};
 
 export default TodoItem;
