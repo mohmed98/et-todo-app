@@ -16,10 +16,7 @@ const App = () => {
 
   useEffect(() => {
     localStorage.setItem("et-todos", JSON.stringify(todos));
-    console.log(todos);
-    // check if any todo is complete and show delete button if true 
     const checkComplete = todos.some(todo => todo.complete);
-    console.log(checkComplete);
     setShowDelete(checkComplete);
   }, [todos]);
 
@@ -95,7 +92,7 @@ const App = () => {
             <button
               className="btn btn-danger"
               type="button"
-              onClick={onClickDelete}
+              data-testid="delete-button"              
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
