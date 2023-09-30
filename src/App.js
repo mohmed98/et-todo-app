@@ -1,80 +1,49 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
 import TodoList from "./components/TodoList";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [title, setTitle] = useState("");
+  const [todos, setTodos] = useState([]);
 
-    this.state = {
-      title: "",
-      todos: [],
-    };
+  useEffect(() => {
+    const storedTodos = localStorage.getItem("et-todos");
 
-    this._onChangeTitle = this._onChangeTitle.bind(this);
-    this._onClickAdd = this._onClickAdd.bind(this);
-    this._onEnterPressAdd = this._onEnterPressAdd.bind(this);
-    this._onCompleteTodo = this._onCompleteTodo.bind(this);
-  }
-
-  componentDidMount() {
-    const todos = localStorage.getItem("et-todos");
-
-    if (!todos) {
-      return;
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
     }
+  }, []);
 
-    this.setState({
-      todos: JSON.parse(todos),
-    });
-  }
+  useEffect(() => {
+    localStorage.setItem("et-todos", JSON.stringify(todos));
+  }, [todos]);
 
-  componentDidUpdate() {
-    localStorage.setItem("et-todos", JSON.stringify(this.state.todos));
-  }
+  const onCompleteTodo = (id) => {
+    const updatedTodos = [...todos];
+    updatedTodos[id].complete = !updatedTodos[id].complete;
+    setTodos(updatedTodos);
+  };
 
-  _onCompleteTodo(id) {
-    const { todos } = this.state;
+  const onChangeTitle = (event) => {
+    setTitle(event.target.value);
+  };
 
-    todos[id].complete = !todos[id].complete;
-
-    this.setState({
-      todos,
-    });
-  }
-
-  _onChangeTitle(event) {
-    const target = event.target;
-    const value = target.value;
-
-    this.setState({
-      title: value,
-    });
-  }
-
-  _onEnterPressAdd(event) {
-    if (13 === event.keyCode) {
-      this._onClickAdd();
+  const onEnterPressAdd = (event) => {
+    if (event.keyCode === 13) {
+      onClickAdd();
     }
-  }
+  };
 
-  _onClickAdd(event) {
-    const { title, todos } = this.state;
-
-    todos.push({
+  const onClickAdd = () => {
+    const newTodo = {
       title,
-      compete: false,
-    });
+      complete: false,
+    };
+    setTodos([...todos, newTodo]);
+    setTitle("");
+  };
 
-    this.setState({
-      title: "",
-      todos,
-    });
-  }
-
-  _renderHeader() {
-    const { title } = this.state;
-
+  const renderHeader = () => {
     return (
       <div className="todos-app-header card-header">
         <h2>ToDo</h2>
@@ -84,15 +53,15 @@ class App extends Component {
             name="title"
             placeholder="What do you need to do?"
             className="form-control add-new-todo"
-            onChange={this._onChangeTitle}
-            onKeyDown={this._onEnterPressAdd}
+            onChange={onChangeTitle}
+            onKeyDown={onEnterPressAdd}
             value={title}
           />
           <div className="input-group-append">
             <button
               className="btn btn-success"
               type="button"
-              onClick={this._onClickAdd}
+              onClick={onClickAdd}
             >
               <span
                 className=""
@@ -108,30 +77,22 @@ class App extends Component {
         </div>
       </div>
     );
-  }
+  };
 
-  render() {
-    const { todos } = this.state;
-
-    return (
-      <div className="container">
-        <div className="row">
-          <div className="col col-md-6 offset-md-3 mt-2">
-            <div className="todos-app card">
-              {this._renderHeader()}
-              <div className="card-body">
-                <TodoList
-                  todos={todos}
-                  onComplete={this._onCompleteTodo}
-                  onDelete={this._onDeleteTodo}
-                />
-              </div>
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col col-md-6 offset-md-3 mt-2">
+          <div className="todos-app card">
+            {renderHeader()}
+            <div className="card-body">
+              <TodoList todos={todos} onComplete={onCompleteTodo} />
             </div>
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;
