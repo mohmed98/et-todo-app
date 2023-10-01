@@ -31,7 +31,7 @@ const App = () => {
   };
 
   const onEnterPressAdd = (event) => {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13 && title) {
       onClickAdd();
     }
   };
