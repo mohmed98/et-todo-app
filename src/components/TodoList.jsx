@@ -1,16 +1,105 @@
-import React from "react";
-import map from "lodash/map";
+import React from 'react';
 
-import TodoItem from "./TodoItem";
+class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editingTodoId: null,
+      editingTodoText: '',
+    };
+  }
 
-const TodoList = ({ todos, onComplete }) => {
-  const _renderTodos = () => {
-    return map(todos, (todo, index) => {
-      return <TodoItem key={index} id={index} onComplete={onComplete} {...todo} />;
+  handleUpdateClick = (id, text) => {
+    this.setState({
+      editingTodoId: id,
+      editingTodoText: text,
     });
   };
 
-  return <ul className="list-group todo-list">{_renderTodos()}</ul>;
-};
+  handleSaveClick = () => {
+    console.log(this.state.editingTodoId, this.state.editingTodoText);
+    this.props.onUpdateTodoText(this.state.editingTodoId, this.state.editingTodoText);
+    this.setState({
+      editingTodoId: null,
+      editingTodoText: '',
+    });
+  };
+
+  handleCancelClick = () => {
+    this.setState({
+      editingTodoId: null,
+      editingTodoText: '',
+    });
+  };
+
+  render() {
+    if (this.props.todos.size === 0) {
+      return null;
+    }
+
+    return (
+      <section id="container" className="m-2">
+        <ul id="todo-list" className="list-group">
+          {[...this.props.todos.values()].reverse().map(todo => (
+            <li key={todo.id} className="list-group-item d-flex align-items-center justify-content-between gap-3 ">
+              <div className="d-flex gap-3">
+                <input
+                  className=""
+                  type="checkbox"
+                  checked={todo.complete}
+                  onChange={() => this.props.onToggleTodo(todo.id)}
+                />
+                {this.state.editingTodoId === todo.id ? (
+                  <input
+                    type="text"
+                    value={this.state.editingTodoText}
+                    onChange={e => this.setState({ editingTodoText: e.target.value })}
+                  />
+                ) : (
+                  <label className="form-check-label me-1">{todo.text}</label>
+                )}
+              </div>
+              <div className='d-flex gap-3'>
+
+                {this.state.editingTodoId === todo.id ? (
+                  <>
+                    <button className="btn btn-success" onClick={this.handleSaveClick}>
+                      Save
+                    </button>
+                    <button className="btn btn-secondary" onClick={this.handleCancelClick}>
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => this.props.onDeleteTodo(todo.id)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                      </svg>
+                    </button>
+                    <button
+                      className="btn btn-info"
+                      onClick={() => this.handleUpdateClick(todo.id, todo.text)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                      </svg>
+                    </button>
+                  </>
+
+                )}
+              </div>
+
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  }
+}
 
 export default TodoList;
