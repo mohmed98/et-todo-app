@@ -10,23 +10,36 @@ class TodoStore extends ReduceStore {
   }
 
   getInitialState() {
+    const storedState = localStorage.getItem('todoState');
+    if (storedState) {
+      return OrderedMap(JSON.parse(storedState));
+    }
     return OrderedMap();
   }
 
   reduce(state, action) {
     switch (action.type) {
       case TodoActionTypes.ADD_TODO:
-        if (!action.text) {
-          return state;
+        {
+          if (!action.text) {
+            return state;
+          }
+          const id = Counter.increment();
+          const newState = state.set(id, new Todo({
+            id,
+            text: action.text,
+            complete: false,
+          }));
+          localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
+          return newState
         }
-        const id = Counter.increment();
-        return state.set(id, new Todo({
-          id,
-          text: action.text,
-          complete: false,
-        }));
       case TodoActionTypes.DELETE_TODO:
-        return state.delete(action.id);
+        {
+          const newState = state.delete(action.id);
+          localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
+          return newState
+        }
+
 
       case TodoActionTypes.TOGGLE_TODO:
         return state.update(
