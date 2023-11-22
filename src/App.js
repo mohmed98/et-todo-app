@@ -1,6 +1,9 @@
-import React from 'react';
+import React from "react";
+import TodoList from "./components/TodoList";
+import AddTodoItem from "./components/AddTodoItem";
 
 function App(props) {
+console.log(props)
   return (
     <div className='container'>
       <Header {...props} />
@@ -11,39 +14,11 @@ function App(props) {
 }
 
 function Header(props) {
+ 
   return (
     <header id="header">
       <h2>ToDo</h2>
-      <div className="input-group">
-          <input
-            type="text"
-            name="title"
-            required
-            placeholder="What do you need to do?"
-            className="form-control add-new-todo"
-            // onChange={onChangeTitle}
-            // onKeyDown={onEnterPressAdd}
-            // value={title}
-          />
-          <div className="input-group-append">
-            <button
-              className="btn btn-success"
-              // disabled={!title}
-              type="button"
-              // onClick={onClickAdd}
-            >
-              <span
-                className=""
-                style={{
-                  fontSize: "24px",
-                  lineHeight: "16px",
-                }}
-              >
-                +
-              </span>
-            </button>
-          </div>
-        </div>
+     <AddTodoItem {...props} />
     </header>
   );
 }
