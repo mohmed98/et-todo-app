@@ -39,13 +39,20 @@ class TodoStore extends ReduceStore {
           localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
           return newState
         }
-
-
       case TodoActionTypes.TOGGLE_TODO:
-        return state.update(
-          action.id,
-          todo => todo.set('complete', !todo.complete),
-        );
+        {
+          const newState = state.update(
+            action.id,
+            todo => new Todo({
+              ...todo,
+              complete: !todo.complete,
+            }),
+          );
+          localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
+
+          return newState
+
+        }
 
       default:
 
