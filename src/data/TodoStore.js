@@ -10,10 +10,6 @@ class TodoStore extends ReduceStore {
   }
 
   getInitialState() {
-    const storedState = localStorage.getItem('todoState');
-    if (storedState) {
-      return OrderedMap(JSON.parse(storedState));
-    }
     return OrderedMap();
   }
 
