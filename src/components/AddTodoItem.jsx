@@ -1,4 +1,5 @@
 import React from 'react';
+import { PlusIcon } from '../data/icons/icons';
 
 class AddTodoItem extends React.Component {
   constructor(props) {
@@ -39,15 +40,7 @@ class AddTodoItem extends React.Component {
             type="button"
             onClick={this.handleButtonClick}
           >
-            <span
-              className=""
-              style={{
-                fontSize: "24px",
-                lineHeight: "16px",
-              }}
-            >
-              +
-            </span>
+             <PlusIcon />
           </button>
         </div>
       </div>
