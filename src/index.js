@@ -12,3 +12,6 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+TodoActions.addTodo('My first task');
+TodoActions.addTodo('Another task');
+TodoActions.addTodo('Finish this tutorial');

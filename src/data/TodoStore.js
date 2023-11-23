@@ -24,19 +24,19 @@ class TodoStore extends ReduceStore {
           if (!action.text) {
             return state;
           }
-          const id = Counter.increment();
+          const id = Counter.generateId();
           const newState = state.set(id, new Todo({
             id,
             text: action.text,
             complete: false,
           }));
-          localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
+          
           return newState
         }
       case TodoActionTypes.DELETE_TODO:
         {
           const newState = state.delete(action.id);
-          localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
+          
           return newState
         }
         case TodoActionTypes.UPDATE_TODO_TEXT:
@@ -48,21 +48,14 @@ class TodoStore extends ReduceStore {
                 text: action.text,
               }),
             );
-            localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
+            
             return newState
           }
       case TodoActionTypes.TOGGLE_TODO:
-        {
-          const newState = state.update(
-            action.id,
-            todo => new Todo({
-              ...todo,
-              complete: !todo.complete,
-            }),
-          );
-          localStorage.setItem('todoState', JSON.stringify(newState.toJS()));
-          return newState
-        }
+        return state.update(
+          action.id,
+          todo => todo.set('complete', !todo.complete),
+        );
 
       default:
 
