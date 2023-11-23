@@ -1,20 +1,35 @@
+import React from 'react';
 import App from './App';
-import {Container} from 'flux/utils';
 import TodoStore from './data/TodoStore';
 import TodoActions from './data/TodoActions';
 
-function getStores() {
-  return [TodoStore];
+class AppContainer extends React.Component {
+  state = this.getCurrentStateFromStores();
+
+  componentDidMount() {
+    TodoStore.addChangeListener(this.handleStoreChange);
+  }
+
+  componentWillUnmount() {
+    TodoStore.removeChangeListener(this.handleStoreChange);
+  }
+
+  getCurrentStateFromStores() {
+    return {
+      todos: TodoStore.getAll(),
+    };
+  }
+
+  handleStoreChange = () => {
+    this.setState(this.getCurrentStateFromStores());
+  }
+
+  render() {
+    return <App 
+      todos={this.state.todos}
+      onAddTodo={TodoActions.addTodo}
+    />;
+  }
 }
 
-function getState() {
-  return {
-    todos: TodoStore.getState(),
-    onDeleteTodo: TodoActions.deleteTodo,
-    onAddTodo: TodoActions.addTodo,
-    onToggleTodo: TodoActions.toggleTodo,
-    onUpdateTodoText: TodoActions.updateTodoText,
-  };
-}
-
-export default Container.createFunctional(App, getStores, getState);
+export default AppContainer;

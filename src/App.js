@@ -26,11 +26,12 @@ function Header(props) {
 
 
 function Footer(props) {
-  if (props.todos.size === 0) {
+  const todosArray = Array.from(props.todos.values());
+  if (todosArray.length === 0) {
     return null;
   }
 
-  const remaining = props.todos.filter(todo => !todo.complete).size;
+  const remaining = todosArray.filter(todo => !todo.complete).length;
   const phrase = remaining === 1 ? ' item left' : ' items left';
 
   return (
