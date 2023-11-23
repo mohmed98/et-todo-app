@@ -30,6 +30,8 @@ class AddTodoItem extends React.Component {
           className="form-control add-new-todo"
           onChange={this.handleInputChange}
           value={this.state.title}
+          onKeyDown={(e) => { if (e.key === 'Enter') {this.handleButtonClick()} }}
+
         />
         <div className="input-group-append">
           <button
