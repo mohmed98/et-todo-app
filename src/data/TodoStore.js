@@ -1,83 +1,83 @@
-import { EventEmitter } from 'events';
+import {createReduxStore, register} from '@wordpress/data';
 import TodoActionTypes from './TodoActionTypes';
-import TodoDispatcher from './TodoDispatcher';
 import Counter from './Counter';
 import Todo from './Todo';
+import actions from './TodoActions';
 
-const CHANGE_EVENT = 'change';
+const DEFAULT_STATE = {
+  todos: new Map(),
+};
 
-class TodoStore extends EventEmitter {
-  constructor() {
-    super();
-    this.state = new Map();
-    this.dispatchToken = TodoDispatcher.register(this.handleAction.bind(this));
-  }
-
-  getAll() {
-    return this.state;
-  }
-
-  emitChange() {
-    this.emit(CHANGE_EVENT);
-  }
-
-  addChangeListener(callback) {
-    this.on(CHANGE_EVENT, callback);
-  }
-
-  removeChangeListener(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
-  }
-
-  handleAction(action) {
-    switch (action.type) {
-      case TodoActionTypes.ADD_TODO: {
-        const id = Counter.generateId();
-        this.state.set(id, new Todo({
-          id,
-          text: action.text,
-          complete: false,
-        }));
-        this.emitChange();
-        break;
-      }
-      case TodoActionTypes.DELETE_TODO:
-        this.state.delete(action.id);
-        this.emitChange();
-        break;
-      case TodoActionTypes.UPDATE_TODO_TEXT:
-        {
-          const todoToUpdate = this.state.get(action.id);
-          if (todoToUpdate) {
-            const updatedTodo = new Todo({
-              id: action.id,
-              complete: todoToUpdate.complete,
-              text: action.text,
-            });
-            this.state.set(action.id, updatedTodo);
-            this.emitChange();
-          }
-          break;
-        }
-      case TodoActionTypes.TOGGLE_TODO:
-        {
-          console.log(action.id);
-          const todoToToggle = this.state.get(action.id);
-          if (todoToToggle) {
-            console.log(todoToToggle);
-            const toggledTodo = new Todo({
-              id: action.id,
-              text: todoToToggle.text,
-              complete: !todoToToggle.complete,
-            });
-            this.state = new Map(this.state.set(action.id, toggledTodo));
-            this.emitChange();
-          }
-          break;
-        }
-      default:
+const reducer = (state = DEFAULT_STATE, action) => {  
+  switch (action.type) {
+    case TodoActionTypes.ADD_TODO: {
+      const id = Counter.generateId();
+      const newTodo = new Todo({
+        id,
+        text: action.text,
+        complete: false,
+      });
+      return {
+        ...state,
+        todos: new Map(state.todos.set(id, newTodo)),
+      };
     }
-  }
-}
+    case TodoActionTypes.DELETE_TODO: {
+      const newTodos = new Map(state.todos);
+      newTodos.delete(action.id);
+      return {
+        ...state,
+        todos: newTodos,
+      };
+    }
+    case TodoActionTypes.UPDATE_TODO_TEXT: {
+      const todoToUpdate = state.todos.get(action.id);
+      if (todoToUpdate) {
+        const updatedTodo = new Todo({
+          id: action.id,
+          complete: todoToUpdate.complete,
+          text: action.text,
+        });
+        return {
+          ...state,
+          todos: new Map(state.todos.set(action.id, updatedTodo)),
+        };
+      }
+      return state;
+    }
+    case TodoActionTypes.TOGGLE_TODO: {
+      const todoToToggle = state.todos.get(action.id);
+      if (todoToToggle) {
+        const toggledTodo = new Todo({
+          id: action.id,
+          text: todoToToggle.text,
+          complete: !todoToToggle.complete,
+        });
+        return {
+          ...state,
+          todos: new Map(state.todos.set(action.id, toggledTodo)),
+        };
+      }
+      return state;
+    }
+    default:
+      return state;
+  } 
+};
 
-export default new TodoStore();
+
+const selectors = {
+  getTodos: (state) => {
+    return Array.from(state.todos.values());
+  },
+};
+const storeConfig = {
+  reducer,
+  actions,
+  selectors,
+};
+
+const store = createReduxStore( 'todo', storeConfig);
+
+register( store );
+export default store;

@@ -1,30 +1,29 @@
 import TodoActionTypes from './TodoActionTypes';
-import TodoDispatcher from './TodoDispatcher';
 
-const Actions = {
+const actions = {
   addTodo(text) {
-    TodoDispatcher.dispatch({
+    return({
       type: TodoActionTypes.ADD_TODO,
       text,
     });
   },
 
   deleteTodo(id) {
-    TodoDispatcher.dispatch({
+    return({
       type: TodoActionTypes.DELETE_TODO,
       id,
     });
   },
 
   toggleTodo(id) {
-    TodoDispatcher.dispatch({
+    return({
       type: TodoActionTypes.TOGGLE_TODO,
       id,
     });
   },
 
   updateTodoText(id, text) {
-    TodoDispatcher.dispatch({
+    return({
       type: TodoActionTypes.UPDATE_TODO_TEXT,
       text,
       id
@@ -32,4 +31,5 @@ const Actions = {
   },
 };
 
-export default Actions;
+
+export default actions;

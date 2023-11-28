@@ -1,35 +1,22 @@
 import React from 'react';
+import { withSelect, withDispatch } from '@wordpress/data';
 import App from './App';
-import TodoStore from './data/TodoStore';
-import TodoActions from './data/TodoActions';
 
-class AppContainer extends React.Component {
-  state = this.getCurrentStateFromStores();
-
-  componentDidMount() {
-    TodoStore.addChangeListener(this.handleStoreChange);
+const AppContainer = ({ todos, addTodo }) => {
+  if (!todos || !addTodo) {
+    return null; // or some loading state
   }
+  return <App todos={todos} addTodo={addTodo} />;
+};
 
-  componentWillUnmount() {
-    TodoStore.removeChangeListener(this.handleStoreChange);
-  }
-
-  getCurrentStateFromStores() {
-    return {
-      todos: TodoStore.getAll(),
-    };
-  }
-
-  handleStoreChange = () => {
-    this.setState(this.getCurrentStateFromStores());
-  }
-
-  render() {
-    return <App 
-      todos={this.state.todos}
-      onAddTodo={TodoActions.addTodo}
-    />;
-  }
-}
-
-export default AppContainer;
+export default withSelect((select) => {
+  const todoStore = select('todo');
+  return {
+    todos: todoStore ? todoStore.getTodos() : null,
+  };
+})(withDispatch((dispatch) => {
+  const todoStore = dispatch('todo');
+  return {
+    addTodo: todoStore ? todoStore.addTodo : null,
+  };
+})(AppContainer));
