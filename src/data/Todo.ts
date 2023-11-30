@@ -3,7 +3,7 @@ import {Record} from 'immutable';
 const Todo = Record({
   id: '',
   complete: false,
-  text: '',
+  title: '',
 });
 
 export default Todo;

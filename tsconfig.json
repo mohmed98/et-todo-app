@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "jsx": "react", // for plain React projects use "react", for Next.js projects or similar use "preserve"
+    "module": "esnext",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noImplicitAny": true
+  },
+  "include": ["src"]
+}
