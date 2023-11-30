@@ -1,20 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import AppContainer from './AppContainer';
-import TodoActions from './data/TodoActions';
-// eslint-disable-next-line no-unused-vars
-import store from './data/TodoStore';
 
-ReactDOM.render(
+const root = document.getElementById('root');
+const appRoot = ReactDOM.createRoot(root);
+appRoot.render(
   <React.StrictMode>
-      
     <AppContainer />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
 
-TodoActions.addTodo('My first task');
-TodoActions.addTodo('Another task');
-TodoActions.addTodo('Finish this tutorial');

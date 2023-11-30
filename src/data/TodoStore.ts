@@ -3,12 +3,12 @@ import TodoActionTypes from './TodoActionTypes';
 import Counter from './Counter';
 import Todo from './Todo';
 import actions from './TodoActions';
-
+import { Action, State } from './types';
 const DEFAULT_STATE = {
   todos: new Map(),
 };
 
-const reducer = (state = DEFAULT_STATE, action) => {  
+const reducer = (state = DEFAULT_STATE, action: Action) => {  
   switch (action.type) {
     case TodoActionTypes.ADD_TODO: {
       const id = Counter.generateId();
@@ -64,20 +64,20 @@ const reducer = (state = DEFAULT_STATE, action) => {
       return state;
   } 
 };
-
-
 const selectors = {
-  getTodos: (state) => {
+  getTodos: (state: State) => {
     return Array.from(state.todos.values());
   },
 };
+export const STORE_NAME = 'todo';
+
 const storeConfig = {
   reducer,
   actions,
   selectors,
 };
 
-const store = createReduxStore( 'todo', storeConfig);
 
+export const store = createReduxStore(STORE_NAME, storeConfig);
 register( store );
-export default store;
+
