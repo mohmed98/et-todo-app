@@ -1,31 +1,31 @@
 import TodoActionTypes from './TodoActionTypes';
-
+import {TodoType} from './types';
 const actions = {
-  addTodo(text) {
+  addTodo(title: TodoType['title']) {
     return({
       type: TodoActionTypes.ADD_TODO,
-      text,
+      title,
     });
   },
 
-  deleteTodo(id) {
+  deleteTodo(id: TodoType['id']) {
     return({
       type: TodoActionTypes.DELETE_TODO,
       id,
     });
   },
 
-  toggleTodo(id) {
+  toggleTodo(id: TodoType['id']) {
     return({
       type: TodoActionTypes.TOGGLE_TODO,
       id,
     });
   },
 
-  updateTodoText(id, text) {
+  updateTodoText(id: TodoType['id'], title: TodoType['title']) { 
     return({
       type: TodoActionTypes.UPDATE_TODO_TEXT,
-      text,
+      title,
       id
     });
   },

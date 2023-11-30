@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch } from '@wordpress/data';
 import { PencilIcon, TrashIcon } from '../data/icons/icons';
-
-const TodoItem = ({ todo }) => {
-  const [editingTodoId, setEditingTodoId] = useState(null);
+import { TodoType } from '../data/types';
+const TodoItem = ({todo}: {todo: TodoType}) => {
+  const [editingTodoId, setEditingTodoId] = useState<TodoType['id']| null>(null);
   const [editingTodoText, setEditingTodoText] = useState('');
   const dispatch = useDispatch();
 
-  const handleUpdateClick = (id, text) => {
+  const handleUpdateClick = (id: TodoType['id'], title: TodoType['title']) => {
     setEditingTodoId(id);
-    setEditingTodoText(text);
+    setEditingTodoText(title);
   };
 
   const handleSaveClick = () => {
@@ -39,7 +39,7 @@ const TodoItem = ({ todo }) => {
             onChange={e => setEditingTodoText(e.target.value)}
           />
         ) : (
-          <label className="form-check-label me-1">{todo.text}</label>
+          <label className="form-check-label me-1">{todo.title}</label>
         )}
       </div>
       <div className='d-flex gap-3'>
@@ -62,7 +62,7 @@ const TodoItem = ({ todo }) => {
             </button>
             <button
               className="btn btn-secondary"
-              onClick={() => handleUpdateClick(todo.id, todo.text)}
+              onClick={() => handleUpdateClick(todo.id, todo.title)}
             >
               <PencilIcon className={'text-white'}/>
             </button>

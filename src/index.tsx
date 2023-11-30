@@ -4,7 +4,7 @@ import './index.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import AppContainer from './AppContainer';
 
-const root = document.getElementById('root');
+const root: HTMLElement | null = document.getElementById('root') as HTMLElement;
 const appRoot = ReactDOM.createRoot(root);
 appRoot.render(
   <React.StrictMode>

@@ -14,7 +14,7 @@ const reducer = (state = DEFAULT_STATE, action: Action) => {
       const id = Counter.generateId();
       const newTodo = new Todo({
         id,
-        text: action.text,
+        title: action.title,
         complete: false,
       });
       return {
@@ -36,7 +36,7 @@ const reducer = (state = DEFAULT_STATE, action: Action) => {
         const updatedTodo = new Todo({
           id: action.id,
           complete: todoToUpdate.complete,
-          text: action.text,
+          title: action.title,
         });
         return {
           ...state,
@@ -50,7 +50,7 @@ const reducer = (state = DEFAULT_STATE, action: Action) => {
       if (todoToToggle) {
         const toggledTodo = new Todo({
           id: action.id,
-          text: todoToToggle.text,
+          title: todoToToggle.title,
           complete: !todoToToggle.complete,
         });
         return {

@@ -1,7 +1,7 @@
 export type Action = {
     type: typeof TodoActionTypes[keyof typeof TodoActionTypes];
     id?: string;
-    text?: string;
+    title?: string;
   };
   
   export interface TodoType {

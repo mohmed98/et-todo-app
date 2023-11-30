@@ -6,7 +6,7 @@ const AddTodoItem = () => {
   const [title, setTitle] = useState('');
   const dispatch = useDispatch();
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 

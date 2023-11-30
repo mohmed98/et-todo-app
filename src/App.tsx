@@ -9,24 +9,20 @@ interface Todo {
 
 interface AppProps {
   todos: Todo[];
-  addTodo: (title: string) => void;
 }
-const App: React.FC<AppProps> = ({ todos, addTodo }) =>  {
+const App: React.FC<AppProps> = ({ todos }) =>  {
   
 
   return (
     <div className='container-md'>
-      <Header todos={todos} addTodo={addTodo}/>
+      <Header/>
       <TodoList  todos={todos} />
       <Footer todos={todos} />
     </div>
   );
 }
-interface HeaderProps {
-  todos: Todo[];
-  addTodo: (title: string) => void;
-}
-function Header(props: HeaderProps) {
+
+function Header() {
 
   return (
     <header id="header">
